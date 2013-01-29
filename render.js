@@ -5,7 +5,7 @@ function renderCircle(svg, x, y, r) {
 	el.setAttribute('r', r);
 	el.setAttribute('stroke', '#333');
 	el.setAttribute('stroke-width', 1);
-	el.setAttribute('fill', '#000');
+	el.setAttribute('fill', '#0ff');
 	svg.appendChild(el);
 }
 
@@ -42,6 +42,6 @@ function renderGraph(svg, data) {
 		n1 = data.nodes[i];
 
 		//render the nodes at their starting positions
-		renderCircle(svg, n1.p.x, n1.p.y, 5);
+		renderCircle(svg, n1.p.x, n1.p.y, 10);
 	}
 }
