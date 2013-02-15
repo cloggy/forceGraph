@@ -2,6 +2,12 @@
 	<head>
 		<title>forceGraph Test</title>
 		
+		<style type="text/css">
+			.node:hover {
+				fill: red;
+			}
+
+		</style>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 		<script type="text/javascript" src="Vector.js"></script>
 		<script type="text/javascript" src="Node.js"></script>
@@ -31,6 +37,10 @@ function renderLoop(framesPerSecond, startTime, svg, data) {
 		for(var i=0, l=data.nodes.length; i<l; ++i) {
 			totalForce = new Vector(0, 0);
 			node = data.nodes[i];
+
+			if(node.stuck) {
+				continue;
+			}
 
 			//update totalForce for each spring attached to the node
 			for(s = 0, sL = node.springs.length; s<sL; ++s) {
@@ -82,22 +92,30 @@ function renderLoop(framesPerSecond, startTime, svg, data) {
 				edges: [
 					{ source: 0, target: 1 },
 					{ source: 0, target: 2 },
-					{ source: 0, target: 3 },
-					{ source: 0, target: 4 },
-					{ source: 0, target: 12 },
-					{ source: 0, target: 10 },
-					{ source: 4, target: 5 },
-					{ source: 4, target: 7 },
-					{ source: 10, target: 9 },
+					{ source: 1, target: 6 },
+					{ source: 2, target: 3 },
+					{ source: 2, target: 4 },
+					{ source: 2, target: 5 },
+					{ source: 3, target: 6 },
+					{ source: 4, target: 6 },
+					{ source: 5, target: 6 },
+					{ source: 6, target: 7 },
+					{ source: 6, target: 10 },
+					{ source: 7, target: 8 },
+					{ source: 7, target: 9 },
 					{ source: 10, target: 11 },
-					{ source: 7, target: 6 },
-					{ source: 7, target: 8 }
+					{ source: 8, target: 12 },
+					{ source: 9, target: 12 }
 				]
 			}
 
 			data.nodes = [];
 			for(i = 0; i <= 12; ++i) {
-				data.nodes.push(new Node(new Vector( 350 + Math.random()*100, 250 + Math.random()*100), 1, new Vector(0,0)));
+				node = new Node(new Vector( 350 + Math.random()*100, 250 + Math.random()*100), 1, new Vector(0,0));
+				if(i===0) {
+					node.stuck = true;
+				}
+				data.nodes.push(node);
 			}
 
 			//create our list of springs to be used in determining the best position
@@ -105,9 +123,10 @@ function renderLoop(framesPerSecond, startTime, svg, data) {
 			data.springs = [];
 			for(i=0, l=data.edges.length; i<l; ++i) {
 				edge = data.edges[i];
-				data.springs.push(new Spring(data.nodes[edge.source], data.nodes[edge.target], 25, 500));
+				data.springs.push(new Spring(data.nodes[edge.source], data.nodes[edge.target], 30, 750));
 			}
 
+			createGraph(svg, data);
 			renderLoop(30, new Date().getTime(), svg, data);
 		});
 		</script>
