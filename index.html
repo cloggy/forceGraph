@@ -18,93 +18,62 @@
 
 //TODO: remove all of this global garbage
 var mousePosition = null;
-var renderComplete = false;
-var graph = null;
+//var renderComplete = false;
+//var graph = null;
 ////////
 
-// function circle_mouseOut(evt) {
-// 	var circle = evt.target;
-// 	circle.setAttribute('fill', '#0ff');
-// }
+$(document).ready(function() {
+	var svg = document.getElementById('graph'),
+		node = null,
+		edge = null,
+		i = 0,
+		l = 0;
 
-// function circle_mouseOver(evt) {
-// 	var circle = evt.target;
-// 	circle.setAttribute('fill', '#ff0');
-// }
+	var data = {
+		edges: [
+			{ source: 0, target: 1 },
+			{ source: 0, target: 2 },
+			{ source: 1, target: 6 },
+			{ source: 2, target: 3 },
+			{ source: 2, target: 4 },
+			{ source: 2, target: 5 },
+			{ source: 3, target: 6 },
+			{ source: 4, target: 6 },
+			{ source: 5, target: 6 },
+			{ source: 6, target: 7 },
+			{ source: 6, target: 10 },
+			{ source: 7, target: 8 },
+			{ source: 7, target: 9 },
+			{ source: 10, target: 11 },
+			{ source: 8, target: 12 },
+			{ source: 9, target: 12 }
+		]
+	}
 
-// function circle_mouseDown(evt) {
-// 	var circle = evt.target;
-// 	circle.setAttribute('fill', '#f0f');
-// 	circle.setAttribute('stroke-width', 2);
-// 	selectedNode = circle;
-// 	if(renderComplete) {
-// 		renderLoop(30, new Date().getTime(), graph);
-// 	}
-// }
+	///// Initialize the data //////////////////
+	data.nodes = [];
+	for(i = 0; i <= 12; ++i) {
+		node = new Node(new Vector( 350 + Math.random()*100, 250 + Math.random()*100), 1, new Vector(0,0));
+		if(i===0) {
+			node.stuck = true;
+		}
+		data.nodes.push(node);
+	}
 
-// function circle_mouseUp(evt) {
-// 	var circle = evt.target;
-// 	circle.setAttribute('fill', '#ff0');
-// 	selectedNode = null;
-// }
-
-//The renderLoop that will be used to render the graph
-// function renderLoop(framesPerSecond, startTime, graph) {
-	
-// }
-
-		$(document).ready(function() {
-			var svg = document.getElementById('graph'),
-				node = null,
-				edge = null,
-				i = 0,
-				l = 0;
-
-			var data = {
-				edges: [
-					{ source: 0, target: 1 },
-					{ source: 0, target: 2 },
-					{ source: 1, target: 6 },
-					{ source: 2, target: 3 },
-					{ source: 2, target: 4 },
-					{ source: 2, target: 5 },
-					{ source: 3, target: 6 },
-					{ source: 4, target: 6 },
-					{ source: 5, target: 6 },
-					{ source: 6, target: 7 },
-					{ source: 6, target: 10 },
-					{ source: 7, target: 8 },
-					{ source: 7, target: 9 },
-					{ source: 10, target: 11 },
-					{ source: 8, target: 12 },
-					{ source: 9, target: 12 }
-				]
-			}
-
-			///// Initialize the data //////////////////
-			data.nodes = [];
-			for(i = 0; i <= 12; ++i) {
-				node = new Node(new Vector( 350 + Math.random()*100, 250 + Math.random()*100), 1, new Vector(0,0));
-				if(i===0) {
-					node.stuck = true;
-				}
-				data.nodes.push(node);
-			}
-
-			//create our list of springs to be used in determining the best position
-			//for our set of nodes/edges
-			data.springs = [];
-			for(i=0, l=data.edges.length; i<l; ++i) {
-				edge = data.edges[i];
-				data.springs.push(new Spring(data.nodes[edge.source], data.nodes[edge.target], 30, 750));
-			}
-			///////////////////////////////////////////
+	//create our list of springs to be used in determining the best position
+	//for our set of nodes/edges
+	data.springs = [];
+	for(i=0, l=data.edges.length; i<l; ++i) {
+		edge = data.edges[i];
+		data.springs.push(new Spring(data.nodes[edge.source], data.nodes[edge.target], 30, 750));
+	}
+	///////////////////////////////////////////
 
 
-			graph = new Graph(svg, data);
-			//renderLoop(30, new Date().getTime(), graph);
-			graph.renderLoop();
-		});
+	graph = new Graph(svg, data);
+	//renderLoop(30, new Date().getTime(), graph);
+	graph.renderLoop();
+});
 		</script>
 	</head>
 <body>
