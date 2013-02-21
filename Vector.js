@@ -3,6 +3,11 @@ function Vector(_x, _y) {
 	this.y = _y;
 }
 
+Vector.prototype.set = function(_x, _y) {
+	this.x = _x;
+	this.y = _y;
+}
+
 Vector.prototype.add = function(v) {
 	this.x += v.x;
 	this.y += v.y;
@@ -45,6 +50,10 @@ Vector.prototype.normalize = function() {
 		normal = new Vector(this.x / magnitude, this.y / magnitude);
 
 	return normal;
+}
+
+Vector.copy = function(vector) {
+	return new Vector(vector.x, vector.y);
 }
 
 Vector.add = function(v1, v2) {

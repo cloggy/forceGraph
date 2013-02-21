@@ -3,9 +3,9 @@
 		<title>forceGraph Test</title>
 		
 		<style type="text/css">
-			.node:hover {
+			/*.node:hover {
 				fill: red;
-			}
+			}*/
 
 		</style>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
@@ -13,73 +13,45 @@
 		<script type="text/javascript" src="Node.js"></script>
 		<script type="text/javascript" src="spring.js"></script>
 		<script type="text/javascript" src="repulsion.js"></script>
-		<script type="text/javascript" src="render.js"></script>
+		<script type="text/javascript" src="graph.js"></script>
 		<script>
 
+//TODO: remove all of this global garbage
+var mousePosition = null;
+var renderComplete = false;
+var graph = null;
+////////
+
+// function circle_mouseOut(evt) {
+// 	var circle = evt.target;
+// 	circle.setAttribute('fill', '#0ff');
+// }
+
+// function circle_mouseOver(evt) {
+// 	var circle = evt.target;
+// 	circle.setAttribute('fill', '#ff0');
+// }
+
+// function circle_mouseDown(evt) {
+// 	var circle = evt.target;
+// 	circle.setAttribute('fill', '#f0f');
+// 	circle.setAttribute('stroke-width', 2);
+// 	selectedNode = circle;
+// 	if(renderComplete) {
+// 		renderLoop(30, new Date().getTime(), graph);
+// 	}
+// }
+
+// function circle_mouseUp(evt) {
+// 	var circle = evt.target;
+// 	circle.setAttribute('fill', '#ff0');
+// 	selectedNode = null;
+// }
+
 //The renderLoop that will be used to render the graph
-function renderLoop(framesPerSecond, startTime, svg, data) {
-	var timeToWait = 1000 / framesPerSecond;
-
-	setTimeout(function() {
-		var end = new Date().getTime(),
-			timeDiff = (end - startTime) / 1000,
-			node = null,
-			otherNode = null,
-			totalForce = null,
-			s = 0,
-			sL = 0,
-			spring = null,
-			velocity = null,
-			acceleration = null,
-			totalKineticEnergy = 0.0,
-			j = 0;
-
-		for(var i=0, l=data.nodes.length; i<l; ++i) {
-			totalForce = new Vector(0, 0);
-			node = data.nodes[i];
-
-			if(node.stuck) {
-				continue;
-			}
-
-			//update totalForce for each spring attached to the node
-			for(s = 0, sL = node.springs.length; s<sL; ++s) {
-				spring = node.springs[s];
-				totalForce.add(spring.calculateForce(node));
-			}
-
-			for(j = 0; j<l; ++j) {
-				otherNode = data.nodes[j];
-				if(otherNode===node) {
-					continue;
-				}
-				totalForce.add(repulse(node, otherNode));
-			}
-
-			//A = F/M: Acceleration will be recalculated at each timestep
-			acceleration = Vector.divide(totalForce, node.m);
-
-			//V += A*t: update our node's current velocity
-			node.v.add(acceleration.multiply(timeDiff));
-
-			//Ke = .5*m*v^2
-			totalKineticEnergy += 0.5 * node.m * node.v.dotProduct(node.v);
-
-			//P += v*t: update our node's current position
-			node.p.add(Vector.multiply(node.v, timeDiff));
-
-			//apply some level of velocity damping - gotta slow shit down eventually!
-			node.v.multiply(0.40);
-		}
-
-		renderGraph(svg, data);
-
-		// If the system's total kinetic energy is lower than some arbitrary value, stop wasting CPU cycles!
-		if(totalKineticEnergy > 10) {
-			renderLoop(framesPerSecond, new Date().getTime(), svg, data);
-		}
-	}, timeToWait);
-}
+// function renderLoop(framesPerSecond, startTime, graph) {
+	
+// }
 
 		$(document).ready(function() {
 			var svg = document.getElementById('graph'),
@@ -109,6 +81,7 @@ function renderLoop(framesPerSecond, startTime, svg, data) {
 				]
 			}
 
+			///// Initialize the data //////////////////
 			data.nodes = [];
 			for(i = 0; i <= 12; ++i) {
 				node = new Node(new Vector( 350 + Math.random()*100, 250 + Math.random()*100), 1, new Vector(0,0));
@@ -125,9 +98,12 @@ function renderLoop(framesPerSecond, startTime, svg, data) {
 				edge = data.edges[i];
 				data.springs.push(new Spring(data.nodes[edge.source], data.nodes[edge.target], 30, 750));
 			}
+			///////////////////////////////////////////
 
-			createGraph(svg, data);
-			renderLoop(30, new Date().getTime(), svg, data);
+
+			graph = new Graph(svg, data);
+			//renderLoop(30, new Date().getTime(), graph);
+			graph.renderLoop();
 		});
 		</script>
 	</head>

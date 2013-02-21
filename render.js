@@ -7,7 +7,13 @@ function renderCircle(svg, x, y, r) {
 	el.setAttribute('stroke', '#333');
 	el.setAttribute('stroke-width', 1);
 	el.setAttribute('fill', '#0ff');
+	el.setAttribute('onmouseover', 'circle_mouseOver(evt)');
+	el.setAttribute('onmousedown', 'circle_mouseDown(evt)');
+	el.setAttribute('onmouseup', 'circle_mouseUp(evt)');
+	el.setAttribute('onmouseout', 'circle_mouseOut(evt)');
 	svg.appendChild(el);
+
+	return el;
 }
 
 function renderLine(svg, x1, y1, x2, y2) {
@@ -21,57 +27,63 @@ function renderLine(svg, x1, y1, x2, y2) {
 	svg.appendChild(el);
 }
 
-function createGraph(svg, data) {
-	var edge = null,
-		n1 = null,
-		n2 = null,
-		i = 0,
-		numOfEdges = data.edges.length,
-		l = data.nodes.length;
+// function createGraph(svg, data) {
+// 	var edge = null,
+// 		n1 = null,
+// 		n2 = null,
+// 		i = 0,
+// 		numOfEdges = data.edges.length,
+// 		l = data.nodes.length,
+// 		createdElement = null;
 
-	while(svg.hasChildNodes()) {
-		svg.removeChild(svg.lastChild);
-	}
+// 	svg.onmousemove = function(evt) {
+// 		mousePosition = new Vector(evt.clientX, evt.clientY);
+// 	}
 
-	for(i=0, l=numOfEdges; i<l; i++) {
-		edge = data.edges[i];
-		n1 = data.nodes[edge.source];
-		n2 = data.nodes[edge.target];
+// 	while(svg.hasChildNodes()) {
+// 		svg.removeChild(svg.lastChild);
+// 	}
+
+// 	for(i=0, l=numOfEdges; i<l; i++) {
+// 		edge = data.edges[i];
+// 		n1 = data.nodes[edge.source];
+// 		n2 = data.nodes[edge.target];
 		
-		renderLine(svg, n1.p.x, n1.p.y, n2.p.x, n2.p.y);
-	}
+// 		renderLine(svg, n1.p.x, n1.p.y, n2.p.x, n2.p.y);
+// 	}
 
-	for(i=0, l=data.nodes.length; i<l; i++) {
-		n1 = data.nodes[i];
+// 	for(i=0, l=data.nodes.length; i<l; i++) {
+// 		n1 = data.nodes[i];
 
-		//render the nodes at their starting positions
-		renderCircle(svg, n1.p.x, n1.p.y, 10);
-	}
-}
+// 		//render the nodes at their starting positions
+// 		createdElement = renderCircle(svg, n1.p.x, n1.p.y, 10);
+// 		n1.shape = createdElement;
+// 	}
+// }
 
-function renderGraph(svg, data) {
-	var edge = null,
-		n1 = null,
-		n2 = null,
-		i = 0,
-		numOfEdges = data.edges.length,
-		l = data.nodes.length;
+// function renderGraph(svg, data) {
+// 	var edge = null,
+// 		n1 = null,
+// 		n2 = null,
+// 		i = 0,
+// 		numOfEdges = data.edges.length,
+// 		l = data.nodes.length;
 
-	for(i=0, l=numOfEdges; i<l; i++) {
-		edge = data.edges[i];
-		n1 = data.nodes[edge.source];
-		n2 = data.nodes[edge.target];
+// 	for(i=0, l=numOfEdges; i<l; i++) {
+// 		edge = data.edges[i];
+// 		n1 = data.nodes[edge.source];
+// 		n2 = data.nodes[edge.target];
 		
-		svg.childNodes[i].setAttribute('x1', n1.p.x);
-		svg.childNodes[i].setAttribute('x2', n2.p.x);
-		svg.childNodes[i].setAttribute('y1', n1.p.y);
-		svg.childNodes[i].setAttribute('y2', n2.p.y);
-	}
+// 		svg.childNodes[i].setAttribute('x1', n1.p.x);
+// 		svg.childNodes[i].setAttribute('x2', n2.p.x);
+// 		svg.childNodes[i].setAttribute('y1', n1.p.y);
+// 		svg.childNodes[i].setAttribute('y2', n2.p.y);
+// 	}
 
-	for(i=0, l=data.nodes.length; i<l; i++) {
-		n1 = data.nodes[i];
+// 	for(i=0, l=data.nodes.length; i<l; i++) {
+// 		n1 = data.nodes[i];
 
-		svg.childNodes[i+numOfEdges].setAttribute('cx', n1.p.x);
-		svg.childNodes[i+numOfEdges].setAttribute('cy', n1.p.y);
-	}
-}
+// 		svg.childNodes[i+numOfEdges].setAttribute('cx', n1.p.x);
+// 		svg.childNodes[i+numOfEdges].setAttribute('cy', n1.p.y);
+// 	}
+// }
